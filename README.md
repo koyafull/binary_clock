@@ -1,1 +1,1 @@
-Binary Clock project for Nicolas 23's birthday (started late)
+Binary Clock project for Nicolas' 23 birthday (started late)
