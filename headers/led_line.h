@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <vector>
 
-class led_panel
+class led_line
 {
 	private:
 	tm* now;
@@ -12,6 +12,7 @@ class led_panel
 	void time_to_mat();
 
 	public:
-	led_panel(tm*);
+	led_line(tm*);
 	bool * int_to_binary(const int16_t, const int);
+	void print_binary(const bool *, const int);
 };
