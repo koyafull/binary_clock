@@ -2,32 +2,28 @@
 
 using namespace std;
 
-led_line::led_line(struct tm* _now)
+led_line::led_line(int _digit)
 {
-	now = _now;
-	time_to_mat();
+	digit = (int16_t) _digit;
 }
 
-bool * led_line::int_to_binary(const int16_t n, const int size)
+bool * led_line::int_to_binary()
 {
+	int size = sizeof(digit) * 8;
 	bool * res = new bool[size];
 	for(int i = size - 1 ; i > -1 ; i--)
     	{
-        	*(res + size - 1 - i) = ((n>>i) & 1);
+        	*(res + size - 1 - i) = ((digit >> i) & 1);
     	}
 	return res;
 }
 
-void led_line::print_binary(const bool * b, const int size)
+void led_line::print_binary(const bool * b)
 {
+	int size = sizeof(digit) * 8;
 	for(int i = 0 ; i < size ; i++)
 	{
 		cout << *(b + i) << " ";
 	}
 	cout << endl;
-}
-
-void led_line::time_to_mat()
-{
-	
 }
