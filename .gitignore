@@ -1,3 +1,4 @@
 *.o
 binary_clock
 *.swp
+*.old
