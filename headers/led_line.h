@@ -4,10 +4,12 @@
 class led_line
 {
 	private:
-	int16_t digit;
+	bool * line;
+	int size;
 
 	public:
 	led_line(int);
-	bool * int_to_binary();
-	void print_binary(const bool *);
+	const void print_binary();
+
+	friend class led_panel;
 };

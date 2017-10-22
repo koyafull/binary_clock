@@ -4,26 +4,24 @@ using namespace std;
 
 led_line::led_line(int _digit)
 {
-	digit = (int16_t) _digit;
-}
+	// cast to int16_t to reduce storage size
+	int16_t digit = (int16_t) _digit;
 
-bool * led_line::int_to_binary()
-{
-	int size = sizeof(digit) * 8;
-	bool * res = new bool[size];
+	size = sizeof(digit) * 8;
+	line = new bool[size];
+
 	for(int i = size - 1 ; i > -1 ; i--)
     	{
-        	*(res + size - 1 - i) = ((digit >> i) & 1);
+        	*(line + size - 1 - i) = ((digit >> i) & 1);
     	}
-	return res;
 }
 
-void led_line::print_binary(const bool * b)
+const void led_line::print_binary()
 {
-	int size = sizeof(digit) * 8;
+
 	for(int i = 0 ; i < size ; i++)
 	{
-		cout << *(b + i) << " ";
+		cout << *(line + i) << " ";
 	}
 	cout << endl;
 }

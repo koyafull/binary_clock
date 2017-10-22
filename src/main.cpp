@@ -11,5 +11,5 @@ int main() {
 //	cout << now->tm_year << endl;
 	int test(5);
 	led_line ll = led_line(test);
-	ll.print_binary(ll.int_to_binary());
+	ll.print_binary();
 }
