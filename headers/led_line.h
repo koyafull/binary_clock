@@ -1,10 +1,11 @@
 #include <iostream>
 #include <stdint.h>
+#include <vector>
 
 class led_line
 {
 	private:
-	bool * line;
+	std::vector<bool> line;
 	int size;
 
 	public:

@@ -8,20 +8,18 @@ led_line::led_line(int _digit)
 	int16_t digit = (int16_t) _digit;
 
 	size = sizeof(digit) * 8;
-	line = new bool[size];
-
 	for(int i = size - 1 ; i > -1 ; i--)
     	{
-        	*(line + size - 1 - i) = ((digit >> i) & 1);
+        	line.push_back((digit >> i) & 1);
     	}
 }
 
 const void led_line::print_binary()
 {
-
-	for(int i = 0 ; i < size ; i++)
+	vector<bool>::iterator it;
+	for(it = line.begin(); it != line.end(); ++it)
 	{
-		cout << *(line + i) << " ";
+		cout << *it << " ";
 	}
 	cout << endl;
 }
