@@ -5,7 +5,7 @@ using namespace std;
 led_line::led_line(int _digit)
 {
 	// cast to int16_t to reduce storage size
-	int16_t digit = (int16_t) _digit;
+	int8_t digit = (int8_t) _digit;
 
 	size = sizeof(digit) * 8;
 	for(int i = size - 1 ; i > -1 ; i--)
