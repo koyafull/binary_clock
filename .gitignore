@@ -2,3 +2,5 @@
 binary_clock
 *.swp
 *.old
+*.save
+
