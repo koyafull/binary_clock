@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "led_line.h"
+#include "gpio.h"
 
 class led_panel
 {
