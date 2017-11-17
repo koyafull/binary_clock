@@ -7,8 +7,11 @@ main.o : src/main.cpp led_line.o led_panel.o
 led_line.o : src/led_line.cpp headers/led_line.h
 	g++ -c -o led_line.o src/led_line.cpp
 
-led_panel.o : src/led_panel.cpp headers/led_panel.h led_line.o
+led_panel.o : src/led_panel.cpp headers/led_panel.h led_line.o gpio.o
 	g++ -c -o led_panel.o src/led_panel.cpp
+
+gpio.o : src/gpio.cpp headers/gpio.h
+	g++ -c -o gpio.o src/gpio.cpp
 
 clean :
 	rm *.o
