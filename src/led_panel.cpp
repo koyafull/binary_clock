@@ -10,6 +10,25 @@ led_panel::led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
 	this->panel.push_back(led_line(minu));
 	this->panel.push_back(led_line(sect));
 	this->panel.push_back(led_line(secu));
+
+	map<pair<int, int>, int>::iterator it;
+	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
+	{
+		GPIO g(to_string(it->second));
+		g.export_gpio();
+		g.setdir_gpio("out");
+	}
+}
+
+led_panel::~led_panel()
+{
+	map<pair<int, int>, int>::iterator it;
+	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
+	{
+		GPIO g(to_string(it->second));
+		g.setval_gpio("0");
+		g.unexport_gpio();
+	}
 }
 
 const void led_panel::print_binary()
@@ -35,3 +54,21 @@ const void led_panel::print_binary_clock()
 	}
 }
 
+const void led_panel::print_gpio()
+{
+	vector<led_line>::iterator jt;
+	for(int i = 0; i < 8; i++)
+	{
+		for(jt = this->panel.begin(); jt != this->panel.end(); ++jt)
+		{
+			try
+			{
+				
+			}
+			catch(int e)
+			{
+				continue;
+			}
+		}
+	}
+}
