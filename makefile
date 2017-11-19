@@ -1,7 +1,7 @@
-binary_clock : main.o led_line.o led_panel.o gpio.o
-	g++ -std=c++11 -o binary_clock main.o led_line.o led_panel.o gpio.o
+binary_clock : main.o led_line.o led_panel.o GPIO.o
+	g++ -std=c++11 -o binary_clock main.o led_line.o led_panel.o GPIO.o
 
-main.o : src/main.cpp led_line.o led_panel.o gpio.o
+main.o : src/main.cpp led_line.o led_panel.o GPIO.o
 	g++ -c -std=c++11 -o main.o src/main.cpp
 
 led_line.o : src/led_line.cpp headers/led_line.h
