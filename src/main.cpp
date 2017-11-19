@@ -3,6 +3,8 @@
 #include <unistd.h>	// for usleep()
 #include <stdlib.h>
 #include <signal.h>
+#include <utility>	// pair
+#include <map>
 
 #include "../headers/led_panel.h"
 
@@ -20,6 +22,28 @@ void sigint_handler(int signum)
 }
 
 int main() {
+
+	map<pair<int, int>, int> gpio_panel;
+	gpio_panel[make_pair(6,0)] = 2;
+	gpio_panel[make_pair(7,0)] = 3;
+	gpio_panel[make_pair(4,1)] = 14;
+	gpio_panel[make_pair(5,1)] = 15;
+	gpio_panel[make_pair(6,1)] = 4;
+	gpio_panel[make_pair(7,1)] = 17;
+	gpio_panel[make_pair(5,2)] = 18;
+	gpio_panel[make_pair(6,2)] = 27;
+	gpio_panel[make_pair(7,2)] = 22;
+	gpio_panel[make_pair(4,3)] = 25;
+	gpio_panel[make_pair(5,3)] = 8;
+	gpio_panel[make_pair(6,3)] = 9;
+	gpio_panel[make_pair(7,3)] = 11;
+	gpio_panel[make_pair(5,4)] = 1;
+	gpio_panel[make_pair(6,4)] = 5;
+	gpio_panel[make_pair(7,4)] = 6;
+	gpio_panel[make_pair(4,5)] = 16;
+	gpio_panel[make_pair(5,5)] = 21;
+	gpio_panel[make_pair(6,5)] = 19;
+	gpio_panel[make_pair(7,5)] = 26;
 
 	signal(SIGINT, sigint_handler);
 
