@@ -47,12 +47,16 @@ int main() {
 
 	signal(SIGINT, sigint_handler);
 
+	time_t rawtime;
+	struct tm * timeinfo;
+	char buffer[10];
+	time(&rawtime);
+	timeinfo= localtime(&rawtime);
+
+	led_panel current_panel = led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
+
 	while(1)
 	{
-		time_t rawtime;
-   		struct tm * timeinfo;
-		char buffer[10];
-
 		time(&rawtime);
 		timeinfo = localtime(&rawtime);
 
@@ -64,7 +68,7 @@ int main() {
 //		}
 //		cout << endl;
 
-		led_panel current_panel = led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
+		current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
 		current_panel.print_binary_clock();
 		usleep(1000000);
 	}

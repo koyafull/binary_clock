@@ -16,6 +16,7 @@ class led_panel
 	public:
 	led_panel(int, int, int, int, int, int);
 	~led_panel();
+	void set_led_panel(int, int, int, int, int, int);
 	const void print_binary();
 	const void print_binary_clock();
 	const void print_gpio();

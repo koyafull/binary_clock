@@ -4,12 +4,7 @@ using namespace std;
 
 led_panel::led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
 {
-	this->panel.push_back(led_line(ht));
-	this->panel.push_back(led_line(hu));
-	this->panel.push_back(led_line(mint));
-	this->panel.push_back(led_line(minu));
-	this->panel.push_back(led_line(sect));
-	this->panel.push_back(led_line(secu));
+	this->set_led_panel(ht, hu, mint, minu, sect, secu);
 
 	map<pair<int, int>, int>::iterator it;
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
@@ -29,6 +24,16 @@ led_panel::~led_panel()
 		g.setval_gpio("0");
 		g.unexport_gpio();
 	}
+}
+
+void led_panel::set_led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
+{
+	this->panel.push_back(led_line(ht));
+        this->panel.push_back(led_line(hu));
+        this->panel.push_back(led_line(mint));
+        this->panel.push_back(led_line(minu));
+        this->panel.push_back(led_line(sect));
+        this->panel.push_back(led_line(secu));
 }
 
 const void led_panel::print_binary()
