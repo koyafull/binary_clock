@@ -28,6 +28,8 @@ led_panel::~led_panel()
 
 void led_panel::set_led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
 {
+	this->panel.clear();
+
 	this->panel.push_back(led_line(ht));
         this->panel.push_back(led_line(hu));
         this->panel.push_back(led_line(mint));
