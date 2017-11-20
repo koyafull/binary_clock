@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdint.h>
+#include <unistd.h>	// usleep()
 #include <vector>
 #include <map>
 #include <string>
@@ -14,7 +15,7 @@ class led_panel
 	std::map<pair<int, int>, int> gpio_panel;
 
 	public:
-	led_panel(int, int, int, int, int, int);
+	led_panel(map<pair<int, int>, int>, int, int, int, int, int, int);
 	~led_panel();
 	void set_led_panel(int, int, int, int, int, int);
 	const void print_binary();

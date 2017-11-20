@@ -2,15 +2,18 @@
 
 using namespace std;
 
-led_panel::led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
+led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int mint, int minu, int sect, int secu)
 {
 	this->set_led_panel(ht, hu, mint, minu, sect, secu);
+	this->gpio_panel = _gpio_panel;
 
 	map<pair<int, int>, int>::iterator it;
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
 	{
 		GPIO g(to_string(it->second));
+		cout << "exporting " << to_string(it->second) << endl;
 		g.export_gpio();
+		usleep(100000);		// otherwise folers are not created before next step
 		g.setdir_gpio("out");
 	}
 }
@@ -22,6 +25,7 @@ led_panel::~led_panel()
 	{
 		GPIO g(to_string(it->second));
 		g.setval_gpio("0");
+		cout << "unexporting " << it->second << endl;
 		g.unexport_gpio();
 	}
 }

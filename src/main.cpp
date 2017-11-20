@@ -12,64 +12,74 @@ using namespace std;
 
 int ctoi(char c)
 {
-	return c - '0';
+	return c - '0';		// ASCII trick to turn a single char digit to an int digit
 }
 
 void sigint_handler(int signum)
 {
 	cout << endl << endl << "          ==================== SIGINT CAUGHT ====================" << endl << "                                   exiting" << endl << endl;
-	exit(signum);
+	throw 20;		// to call destructor and close properly, we need to exit from main(), so we forward
 }
 
 int main() {
-
-	map<pair<int, int>, int> gpio_panel;
-	gpio_panel[make_pair(6,0)] = 2;
-	gpio_panel[make_pair(7,0)] = 3;
-	gpio_panel[make_pair(4,1)] = 14;
-	gpio_panel[make_pair(5,1)] = 15;
-	gpio_panel[make_pair(6,1)] = 4;
-	gpio_panel[make_pair(7,1)] = 17;
-	gpio_panel[make_pair(5,2)] = 18;
-	gpio_panel[make_pair(6,2)] = 27;
-	gpio_panel[make_pair(7,2)] = 22;
-	gpio_panel[make_pair(4,3)] = 25;
-	gpio_panel[make_pair(5,3)] = 8;
-	gpio_panel[make_pair(6,3)] = 9;
-	gpio_panel[make_pair(7,3)] = 11;
-	gpio_panel[make_pair(5,4)] = 1;
-	gpio_panel[make_pair(6,4)] = 5;
-	gpio_panel[make_pair(7,4)] = 6;
-	gpio_panel[make_pair(4,5)] = 16;
-	gpio_panel[make_pair(5,5)] = 21;
-	gpio_panel[make_pair(6,5)] = 19;
-	gpio_panel[make_pair(7,5)] = 26;
-
-	signal(SIGINT, sigint_handler);
-
-	time_t rawtime;
-	struct tm * timeinfo;
-	char buffer[10];
-	time(&rawtime);
-	timeinfo= localtime(&rawtime);
-
-	led_panel current_panel = led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
-
-	while(1)
+	try
 	{
+
+		map<pair<int, int>, int> gpio_panel;
+		gpio_panel[make_pair(6,0)] = 2;
+		gpio_panel[make_pair(7,0)] = 3;
+		gpio_panel[make_pair(4,1)] = 14;
+		gpio_panel[make_pair(5,1)] = 15;
+		gpio_panel[make_pair(6,1)] = 4;
+		gpio_panel[make_pair(7,1)] = 17;
+		gpio_panel[make_pair(5,2)] = 18;
+		gpio_panel[make_pair(6,2)] = 27;
+		gpio_panel[make_pair(7,2)] = 22;
+		gpio_panel[make_pair(4,3)] = 25;
+		gpio_panel[make_pair(5,3)] = 8;
+		gpio_panel[make_pair(6,3)] = 9;
+		gpio_panel[make_pair(7,3)] = 11;
+		gpio_panel[make_pair(5,4)] = 1;
+		gpio_panel[make_pair(6,4)] = 5;
+		gpio_panel[make_pair(7,4)] = 6;
+		gpio_panel[make_pair(4,5)] = 16;
+		gpio_panel[make_pair(5,5)] = 21;
+		gpio_panel[make_pair(6,5)] = 19;
+		gpio_panel[make_pair(7,5)] = 26;
+
+		signal(SIGINT, sigint_handler);
+
+		time_t rawtime;
+		struct tm * timeinfo;
+		char buffer[10];
 		time(&rawtime);
-		timeinfo = localtime(&rawtime);
+		timeinfo= localtime(&rawtime);
 
-		strftime(buffer, 10, "%H:%M:%S", timeinfo);
-		cout << buffer << endl;
-//		for(int i = 0 ; i < 10 ; i++)
-//		{
-//			cout << i << "-" << ctoi(buffer[i]) << endl;
-//		}
-//		cout << endl;
+		led_panel current_panel = led_panel(gpio_panel, ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
 
-		current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
-		current_panel.print_binary_clock();
-		usleep(1000000);
+		while(1)
+		{
+			time(&rawtime);
+			timeinfo = localtime(&rawtime);
+
+			strftime(buffer, 10, "%H:%M:%S", timeinfo);
+			cout << buffer << endl;
+	//		for(int i = 0 ; i < 10 ; i++)
+	//		{
+	//			cout << i << "-" << ctoi(buffer[i]) << endl;
+	//		}
+	//		cout << endl;
+
+			current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
+			current_panel.print_binary_clock();
+			usleep(1000000);
+		}
+	}
+	catch(int e)
+	{
+		if(e == 20)
+		{
+			exit(0);
+		}
 	}
 }
