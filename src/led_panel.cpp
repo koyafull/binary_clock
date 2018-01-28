@@ -82,14 +82,11 @@ const void led_panel::print_gpio()
 //				cout << this->panel.at(j).line.at(i) << " ";
 //				cout << gpio_panel[make_pair(i,j)] << " ";
 				int gpio_nb = gpio_panel[make_pair(i,j)];
-				string s_nb = to_string(gpio_nb);
-				string& r = s_nb;
 
 				if(gpio_nb != 0)
 				{
 					GPIO g(to_string(gpio_nb));
 					g.setval_gpio(to_string(panel.at(j).line.at(i)));
-					cout << g.getval_gpio(r) << " ";
 				}
 //				cout << this->panel.at(j).line.at(i) << " ";
 			}
