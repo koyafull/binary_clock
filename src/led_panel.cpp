@@ -67,19 +67,19 @@ const void led_panel::print_binary_clock()
 
 const void led_panel::print_gpio()
 {
-	vector<led_line>::iterator jt;
 	for(int i = 0; i < 8; i++)
 	{
-		for(jt = this->panel.begin(); jt != this->panel.end(); ++jt)
+		for(int j = 0; j < 6; j++)
 		{
 			try
 			{
-				
+				cout << this->panel.at(i).line.at(j) << " ";
 			}
 			catch(int e)
 			{
 				continue;
 			}
 		}
+		cout << endl;
 	}
 }
