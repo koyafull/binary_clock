@@ -72,6 +72,7 @@ int main() {
 
 			current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
 			current_panel.print_binary_clock();
+			current_panel.print_gpio();
 			usleep(1000000);
 		}
 	}

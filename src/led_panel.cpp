@@ -11,9 +11,9 @@ led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int m
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
 	{
 		GPIO g(to_string(it->second));
-		cout << "exporting " << to_string(it->second) << endl;
+		cout << "exporting " << it->second << endl;
 		g.export_gpio();
-		usleep(100000);		// otherwise folers are not created before next step
+		usleep(100000);		// otherwise folders are not created before next step
 		g.setdir_gpio("out");
 	}
 }
@@ -23,10 +23,14 @@ led_panel::~led_panel()
 	map<pair<int, int>, int>::iterator it;
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
 	{
-		GPIO g(to_string(it->second));
-		g.setval_gpio("0");
-		cout << "unexporting " << it->second << endl;
-		g.unexport_gpio();
+		if(it->second != 0)
+		{
+			GPIO g(to_string(it->second));
+			cout << "unexporting " << it->second << endl;
+			g.setval_gpio("0");
+			usleep(100000);		// make sure the value has had the time to be written
+			g.unexport_gpio();
+		}
 	}
 }
 
@@ -67,13 +71,27 @@ const void led_panel::print_binary_clock()
 
 const void led_panel::print_gpio()
 {
+	cout << endl << "PRINT GPIO" << endl;
+
 	for(int i = 0; i < 8; i++)
 	{
 		for(int j = 0; j < 6; j++)
 		{
 			try
 			{
-				cout << this->panel.at(i).line.at(j) << " ";
+//				cout << this->panel.at(j).line.at(i) << " ";
+//				cout << gpio_panel[make_pair(i,j)] << " ";
+				int gpio_nb = gpio_panel[make_pair(i,j)];
+				string s_nb = to_string(gpio_nb);
+				string& r = s_nb;
+
+				if(gpio_nb != 0)
+				{
+					GPIO g(to_string(gpio_nb));
+					g.setval_gpio(to_string(panel.at(j).line.at(i)));
+					cout << g.getval_gpio(r) << " ";
+				}
+//				cout << this->panel.at(j).line.at(i) << " ";
 			}
 			catch(int e)
 			{
