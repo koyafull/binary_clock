@@ -71,7 +71,7 @@ const void led_panel::print_binary_clock()
 
 const void led_panel::print_gpio()
 {
-	cout << endl << "PRINT GPIO" << endl;
+//	cout << endl << "PRINT GPIO" << endl;
 
 	for(int i = 0; i < 8; i++)
 	{
@@ -95,6 +95,6 @@ const void led_panel::print_gpio()
 				continue;
 			}
 		}
-		cout << endl;
+//		cout << endl;
 	}
 }
