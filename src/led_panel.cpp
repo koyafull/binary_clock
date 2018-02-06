@@ -85,8 +85,16 @@ const void led_panel::print_gpio()
 
 				if(gpio_nb != 0)
 				{
+					string current_value = "";
+					string& current_value_ref = current_value;
+
 					GPIO g(to_string(gpio_nb));
-					g.setval_gpio(to_string(panel.at(j).line.at(i)));
+
+					g.getval_gpio(current_value_ref);
+					string new_value = to_string(panel.at(j).line.at(i));
+
+					if(current_value != new_value)
+					g.setval_gpio(new_value);
 				}
 //				cout << this->panel.at(j).line.at(i) << " ";
 			}
