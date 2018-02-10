@@ -26,22 +26,22 @@ int main() {
 	{
 
 		map<pair<int, int>, int> gpio_panel;
-		gpio_panel[make_pair(6,0)] = 2;
-		gpio_panel[make_pair(7,0)] = 3;
+		gpio_panel[make_pair(6,0)] = 4;
+		gpio_panel[make_pair(7,0)] = 17;
 		gpio_panel[make_pair(4,1)] = 14;
 		gpio_panel[make_pair(5,1)] = 15;
-		gpio_panel[make_pair(6,1)] = 4;
-		gpio_panel[make_pair(7,1)] = 17;
+		gpio_panel[make_pair(6,1)] = 27;
+		gpio_panel[make_pair(7,1)] = 22;
 		gpio_panel[make_pair(5,2)] = 18;
-		gpio_panel[make_pair(6,2)] = 27;
-		gpio_panel[make_pair(7,2)] = 22;
+		gpio_panel[make_pair(6,2)] = 10;
+		gpio_panel[make_pair(7,2)] = 9;
 		gpio_panel[make_pair(4,3)] = 25;
 		gpio_panel[make_pair(5,3)] = 8;
-		gpio_panel[make_pair(6,3)] = 9;
-		gpio_panel[make_pair(7,3)] = 11;
+		gpio_panel[make_pair(6,3)] = 11;
+		gpio_panel[make_pair(7,3)] = 5;
 		gpio_panel[make_pair(5,4)] = 1;
-		gpio_panel[make_pair(6,4)] = 5;
-		gpio_panel[make_pair(7,4)] = 6;
+		gpio_panel[make_pair(6,4)] = 6;
+		gpio_panel[make_pair(7,4)] = 13;
 		gpio_panel[make_pair(4,5)] = 16;
 		gpio_panel[make_pair(5,5)] = 21;
 		gpio_panel[make_pair(6,5)] = 19;
