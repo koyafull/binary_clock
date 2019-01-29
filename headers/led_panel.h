@@ -1,3 +1,13 @@
+//////////////////////////////////////////////////////////////////////////
+//									//
+//	led_panel object represents the whole clock as a vector of	//
+//	led_lines. It also provides the link between the computer 	//
+//	reprsentation (as a vector of vector of bool) and the human	//
+//	visualization through the led, controlled by the GPIOs.		//
+//									//
+//////////////////////////////////////////////////////////////////////////
+
+
 #include <iostream>
 #include <stdint.h>
 #include <unistd.h>	// usleep()
@@ -23,3 +33,5 @@ class led_panel
 	const void print_gpio();
 };
 
+// TODO: use explicit function names: print_binary -> to_string, print_gpio -> switch_led like
+// TODO: remove one of the useless to_string
