@@ -3,8 +3,10 @@
 using namespace std;
 
 led_line::led_line(int _digit)
+/// transforms the digit into a vector of bool. Ex: 5 -> 00000101
+// params:
+//  _digit: the associated digit, for example tens of seconds
 {
-	// cast to int16_t to reduce storage size
 	int8_t digit = (int8_t) _digit;
 
 	size = sizeof(digit) * 8;
@@ -15,6 +17,7 @@ led_line::led_line(int _digit)
 }
 
 const void led_line::print_binary()
+/// prints to stdout a human readable shape
 {
 	vector<bool>::iterator it;
 	for(it = line.begin(); it != line.end(); ++it)
