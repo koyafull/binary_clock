@@ -30,7 +30,9 @@ The output must be read as:
 I HAVE NOT created the GPIO lib. I took it from GitHub back then, I'm very sorry my newbie time (well, it's not gone yet for sure) make me unreference it on this project.
 So if you do recognize the origin of this library, I would be really pleased to properly add the reference to it.
 
-# Make it run
+# Use it
+
+Make it run:
 
 ```bash
 cd binary_clock
@@ -38,6 +40,10 @@ make
 make clean
 ./binary_clock
 ```
+
+Developping tool:
+
+The `shutup.sh` script aims to switch off and unexport the GPIOs.
 
 # Known limitations
 
