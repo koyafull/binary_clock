@@ -47,6 +47,9 @@ The `shutup.sh` script aims to switch off and unexport the GPIOs as configured b
 
 # Build it
 
+My achievment building it as a lamp:
+![See doc folder][gif]
+
 ## Drawing
 
 You can find the drawing under [this folder].
@@ -88,3 +91,4 @@ Is really basics. It would need to be reviewed.
 [helpful website]: https://pinout.xyz/
 
 [mapping]: https://github.com/koyafull/binary_clock/blob/master/doc/gpio_clock_mapping.png "gpio_clock_mapping.png"
+[gif]: https://github.com/koyafull/binary_clock/blob/master/doc/from_23_59_50_to00_00_10.gif "GIF"
