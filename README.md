@@ -43,7 +43,7 @@ make clean
 
 Developping tool:
 
-The `shutup.sh` script aims to switch off and unexport the GPIOs.
+The `shutup.sh` script aims to switch off and unexport the GPIOs as configured by the `main.cpp` program.
 
 # Known limitations
 
@@ -52,7 +52,8 @@ The `shutup.sh` script aims to switch off and unexport the GPIOs.
 As the Raspbarry Pi Zero does not embed a clock battery, the time must be syncronized each time it is powered on.
 
 I have personnally configured it to connect to my personnal wifi with the help of this tutorial: 
-[Setting up WIFI via the command line](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md "Raspberry WIFI tutorial").
+[Setting up WIFI via the command line](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md "Raspberry WIFI tutorial")
+This way it can synchronize time through a predefined [NTP server](https://en.wikipedia.org/wiki/Network_Time_Protocol "Wikipedia").
 
 ## Portability
 
