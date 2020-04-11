@@ -87,4 +87,4 @@ Is really basics. It would need to be reviewed.
 [NTP server]: https://en.wikipedia.org/wiki/Network_Time_Protocol "Wikipedia"
 [helpful website]: https://pinout.xyz/
 
-[mapping]: https://github/koyafull/binary_clock/doc/gpio_clock_mapping.png "gpio_clock_mapping.png"
+[mapping]: https://github.com/koyafull/binary_clock/blob/master/doc/gpio_clock_mapping.png "gpio_clock_mapping.png"
