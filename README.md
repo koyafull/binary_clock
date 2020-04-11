@@ -47,7 +47,7 @@ The `shutup.sh` script aims to switch off and unexport the GPIOs as configured b
 
 # Build it
 
-My achievment building it as a lamp:
+My achievment building it as a lamp: it will show time from `23:59:50` to `00:00:10`
 ![See doc folder][gif]
 
 ## Drawing
