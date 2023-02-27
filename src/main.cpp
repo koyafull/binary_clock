@@ -9,7 +9,7 @@
 //	Handles the SINGINT (15) signal to exit gracefully.		//
 //									//
 //////////////////////////////////////////////////////////////////////////
-
+//#define DEBUG
 #include <ctime>
 #include <iostream>
 #include <unistd.h>	// usleep()
@@ -39,6 +39,11 @@ void sigint_handler(int signum)
 
 int main()
 {
+	#ifdef DEBUG
+		cout << "DEBUG MODE" << endl;
+		exit(0);
+	#endif
+
 	try
 	{
 		/// environment variable creation
