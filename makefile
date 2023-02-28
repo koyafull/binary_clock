@@ -4,6 +4,7 @@ endif
 
 binary_clock : main.o led_line.o led_panel.o GPIO.o
 	g++ -std=c++11 -o binary_clock main.o led_line.o led_panel.o GPIO.o
+	make clean
 
 main.o : src/main.cpp led_line.o led_panel.o GPIO.o
 	g++ $(DEBUG) -c -std=c++11 -o main.o src/main.cpp
