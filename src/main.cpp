@@ -39,6 +39,9 @@ void sigint_handler(int signum)
 
 int main()
 {
+	/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
+	signal(SIGINT, sigint_handler);
+
 	#ifdef DEBUG
 		cout << "DEBUG MODE" << endl;
 		exit(0);
@@ -68,9 +71,6 @@ int main()
 		gpio_panel[make_pair(5,5)] = 12;
 		gpio_panel[make_pair(6,5)] = 6;
 		gpio_panel[make_pair(7,5)] = 5;
-
-		/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
-		signal(SIGINT, sigint_handler);
 
 		/// time management
 			/// creates time structure
