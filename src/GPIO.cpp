@@ -41,7 +41,7 @@ int GPIO::unexport_gpio()
     }
 
     unexportgpio << this->gpionum ;
-    unexportgpio.close(); 
+    unexportgpio.close();
     return 0;
 }
 
@@ -64,7 +64,7 @@ int GPIO::setval_gpio(string val)
 {
 
     string setval_str = "/sys/class/gpio/gpio" + this->gpionum + "/value";
-    ofstream setvalgpio(setval_str.c_str()); 
+    ofstream setvalgpio(setval_str.c_str());
         if (setvalgpio.fail()){
             cout << " OPERATION FAILED: Unable to set the value of GPIO"<< this->gpionum <<" ."<< endl;
             return -1;
