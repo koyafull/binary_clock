@@ -18,9 +18,17 @@
 #include <utility>	// pair<T, T>
 #include <map>
 
+#include "../headers/common.h"
 #include "../headers/led_panel.h"
 
+
 using namespace std;
+
+#ifdef DEBUG_MODE
+	const bool _DEBUG = true;
+#else
+	const bool _DEBUG = false;
+#endif
 
 int ctoi(char c)
 /// converts a char <c> to an int
@@ -39,13 +47,12 @@ void sigint_handler(int signum)
 
 int main()
 {
+	if(_DEBUG){
+		cout << "DEBUG MODE" << endl;
+	}
+
 	/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
 	signal(SIGINT, sigint_handler);
-
-	#ifdef DEBUG
-		cout << "DEBUG MODE" << endl;
-		exit(0);
-	#endif
 
 	try
 	{

@@ -15,6 +15,7 @@
 #include <map>
 #include <string>
 
+#include "common.h"
 #include "led_line.h"
 #include "GPIO.h"
 
