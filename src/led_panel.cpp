@@ -1,4 +1,5 @@
 #include "../headers/led_panel.h"
+#include "../headers/common.h"
 
 using namespace std;
 
@@ -21,11 +22,17 @@ led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int m
 	map<pair<int, int>, int>::iterator it;
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
 	{
-		GPIO g(to_string(it->second));
+		meta_GPIO* g;
+		if(!_DEBUG){
+			g = new GPIO(to_string(it->second));
+		}
+		else {
+			g = new debug_GPIO(to_string(it->second));
+		}
 		cout << "exporting " << it->second << endl;
-		g.export_gpio();
+		g->export_gpio();
 		usleep(100000);		// waits for folders to be created before using it
-		g.setdir_gpio("out");
+		g->setdir_gpio("out");
 	}
 }
 
@@ -37,11 +44,17 @@ led_panel::~led_panel()
 	{
 		if(it->second != 0)
 		{
-			GPIO g(to_string(it->second));
+			meta_GPIO* g;
+			if(!_DEBUG){
+				g = new GPIO(to_string(it->second));
+			}
+			else {
+				g = new debug_GPIO(to_string(it->second));
+			}
 			cout << "unexporting " << it->second << endl;
-			g.setval_gpio("0");
+			g->setval_gpio("0");
 			usleep(100000);		// makes sure the value has had the time to be written
-			g.unexport_gpio();
+			g->unexport_gpio();
 		}
 	}
 }
@@ -108,13 +121,19 @@ const void led_panel::print_gpio()
 					string current_value = "";
 					string& current_value_ref = current_value;
 
-					GPIO g(to_string(gpio_nb));
+					meta_GPIO* g;
+					if(!_DEBUG){
+						g = new GPIO(to_string(gpio_nb));
+					}
+					else {
+						g = new debug_GPIO(to_string(gpio_nb));
+					}
 
-					g.getval_gpio(current_value_ref);
+					g->getval_gpio(current_value_ref);
 					string new_value = to_string(panel.at(j).line.at(i));
 
 					if(current_value != new_value)	// avoids blinking
-					g.setval_gpio(new_value);
+					g->setval_gpio(new_value);
 				}
 			}
 			catch(int e)

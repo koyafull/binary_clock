@@ -9,7 +9,7 @@
 //	Handles the SINGINT (15) signal to exit gracefully.		//
 //									//
 //////////////////////////////////////////////////////////////////////////
-
+//#define DEBUG
 #include <ctime>
 #include <iostream>
 #include <unistd.h>	// usleep()
@@ -18,9 +18,17 @@
 #include <utility>	// pair<T, T>
 #include <map>
 
+#include "../headers/common.h"
 #include "../headers/led_panel.h"
 
+
 using namespace std;
+
+#ifdef DEBUG_MODE
+	const bool _DEBUG = true;
+#else
+	const bool _DEBUG = false;
+#endif
 
 int ctoi(char c)
 /// converts a char <c> to an int
@@ -39,6 +47,13 @@ void sigint_handler(int signum)
 
 int main()
 {
+	if(_DEBUG){
+		cout << "DEBUG MODE" << endl;
+	}
+
+	/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
+	signal(SIGINT, sigint_handler);
+
 	try
 	{
 		/// environment variable creation
@@ -63,9 +78,6 @@ int main()
 		gpio_panel[make_pair(5,5)] = 12;
 		gpio_panel[make_pair(6,5)] = 6;
 		gpio_panel[make_pair(7,5)] = 5;
-
-		/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
-		signal(SIGINT, sigint_handler);
 
 		/// time management
 			/// creates time structure
