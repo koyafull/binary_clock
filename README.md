@@ -32,16 +32,25 @@ So if you do recognize the origin of this library, I would be really pleased to 
 
 # Run it
 
-```
+## On a Raspberry Pi board
+
+```bash
 cd binary_clock
 make
-make clean
 ./binary_clock
 ```
 
-Developing tool:
-
 The `shutup.sh` script aims to switch off and unexport the GPIOs as configured by the `main.cpp` program.
+
+## On your developing environment
+
+```bash
+cd binary_clock
+make debug=1
+./binary_clock
+```
+
+This will build the program so that it uses the mock of the GPIOs (skipping read/write GPIOs dedicated files).
 
 # Build yours
 
