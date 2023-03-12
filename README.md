@@ -42,7 +42,7 @@ make
 
 The `shutup.sh` script aims to switch off and unexport the GPIOs as configured by the `main.cpp` program.
 
-## On your developing environment
+## On your development environment
 
 ```bash
 cd binary_clock
