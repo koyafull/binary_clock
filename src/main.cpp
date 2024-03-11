@@ -45,7 +45,7 @@ void sigint_handler(int signum)
 	throw 20;		// to call led_panel destructor and close properly, we need to exit from main(), so we forward
 }
 
-void get_time_buffer(char* time_buffer)
+void set_time_buffer(char* time_buffer)
 {
 	/// time management
 	/// creates time structure
@@ -59,10 +59,10 @@ void get_time_buffer(char* time_buffer)
 	// cout << "time_buffer after loading: " << time_buffer << endl;
 }
 
-void update_gpio(led_panel led_panel, char* time_buffer)
+void update_gpio(led_panel* led_panel, char* time_buffer)
 {
 		/// led_panel management
-	led_panel.set_led_panel(
+	led_panel->set_led_panel(
 		ctoi(time_buffer[0]), 
 		ctoi(time_buffer[1]), 
 		ctoi(time_buffer[3]), 
@@ -70,8 +70,8 @@ void update_gpio(led_panel led_panel, char* time_buffer)
 		ctoi(time_buffer[6]), 
 		ctoi(time_buffer[7])
 	);
-	led_panel.print_binary_clock();
-	led_panel.print_gpio();
+	led_panel->print_binary_clock();
+	led_panel->print_gpio();
 }
 
 int main(int argc, char* argv[])
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 		gpio_panel[make_pair(7,5)] = 5;
 		
 		char time_buffer[10];
-		get_time_buffer(time_buffer);
+		set_time_buffer(time_buffer);
 
 		led_panel current_panel = led_panel(
 			gpio_panel, 
@@ -132,8 +132,8 @@ int main(int argc, char* argv[])
 		while(1)
 		{
 			/// infinite loop
-			get_time_buffer(time_buffer);
-			update_gpio(current_panel, time_buffer);
+			set_time_buffer(time_buffer);
+			update_gpio(&current_panel, time_buffer);
 			usleep(1000000);
 		}
 	}
