@@ -45,10 +45,47 @@ void sigint_handler(int signum)
 	throw 20;		// to call led_panel destructor and close properly, we need to exit from main(), so we forward
 }
 
-int main()
+void get_time_buffer(char* time_buffer)
 {
+	/// time management
+	/// creates time structure
+	time_t rawtime;
+	time(&rawtime);						// gets current time
+	struct tm* timeinfo;
+	timeinfo = localtime(&rawtime);		// converts it to friendly object
+
+	strftime(time_buffer, 10, "%H:%M:%S", timeinfo);	// fills buffer with specific format
+	cout << time_buffer << endl;
+	// cout << "time_buffer after loading: " << time_buffer << endl;
+}
+
+void update_gpio(led_panel led_panel, char* time_buffer)
+{
+		/// led_panel management
+	led_panel.set_led_panel(
+		ctoi(time_buffer[0]), 
+		ctoi(time_buffer[1]), 
+		ctoi(time_buffer[3]), 
+		ctoi(time_buffer[4]), 
+		ctoi(time_buffer[6]), 
+		ctoi(time_buffer[7])
+	);
+	led_panel.print_binary_clock();
+	led_panel.print_gpio();
+}
+
+int main(int argc, char* argv[])
+{
+
 	if(_DEBUG){
 		cout << "DEBUG MODE" << endl;
+	}
+
+	int i = 0;
+	cout << "READING ARGUMENTS" << endl;
+	for(i = 0 ; i < argc ; i++)
+	{
+		cout << i << ": " << argv[i] << endl;
 	}
 
 	/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
@@ -78,33 +115,25 @@ int main()
 		gpio_panel[make_pair(5,5)] = 12;
 		gpio_panel[make_pair(6,5)] = 6;
 		gpio_panel[make_pair(7,5)] = 5;
+		
+		char time_buffer[10];
+		get_time_buffer(time_buffer);
 
-		/// time management
-			/// creates time structure
-		time_t rawtime;
-		struct tm * timeinfo;
-		char buffer[10];
-
-		/// loop initialization
-		time(&rawtime);			// gets current time
-		timeinfo = localtime(&rawtime);	// converts it to friendly object
-
-		led_panel current_panel = led_panel(gpio_panel, ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
+		led_panel current_panel = led_panel(
+			gpio_panel, 
+			ctoi(time_buffer[0]), 
+			ctoi(time_buffer[1]), 
+			ctoi(time_buffer[3]), 
+			ctoi(time_buffer[4]), 
+			ctoi(time_buffer[6]), 
+			ctoi(time_buffer[7])
+		);
 
 		while(1)
 		{
 			/// infinite loop
-				/// time management
-			time(&rawtime);					// gets current time
-			timeinfo = localtime(&rawtime);			// converts it to friendly object
-
-			strftime(buffer, 10, "%H:%M:%S", timeinfo);	// fills buffer with specific format
-			cout << buffer << endl;
-
-				/// led_panel management
-			current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
-			current_panel.print_binary_clock();
-			current_panel.print_gpio();
+			get_time_buffer(time_buffer);
+			update_gpio(current_panel, time_buffer);
 			usleep(1000000);
 		}
 	}
