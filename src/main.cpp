@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 	}
 
 	int i = 0;
-	cout << "READING ARGUMENTS" << endl;
+	cout << "READING " << argc << " ARGUMENTS" << endl;
 	for(i = 0 ; i < argc ; i++)
 	{
 		cout << i << ": " << argv[i] << endl;
