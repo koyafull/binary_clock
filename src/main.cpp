@@ -17,6 +17,8 @@
 #include <signal.h>
 #include <utility>	// pair<T, T>
 #include <map>
+#include <unistd.h>
+#include <string.h>
 
 #include "../headers/common.h"
 #include "../headers/led_panel.h"
@@ -29,6 +31,9 @@ using namespace std;
 #else
 	const bool _DEBUG = false;
 #endif
+
+const char* USAGE_STRING = 
+	"Usage:	binary_clock COMMAND\n\nwhere COMMAND is either of the following:\nshutup\t\tturn off every led\nwakeup\t\tturn on every led\n";
 
 int ctoi(char c)
 /// converts a char <c> to an int
@@ -74,18 +79,69 @@ void update_gpio(led_panel* led_panel, char* time_buffer)
 	led_panel->print_gpio();
 }
 
-int main(int argc, char* argv[])
+int parse_arg(int argc, char* argv[]) 
 {
-
-	if(_DEBUG){
-		cout << "DEBUG MODE" << endl;
-	}
-
 	int i = 0;
+	string path = system("ls /proc/self/exe");
+	cout << "READING " << argc << " ARGUMENTS" << endl;
 	cout << "READING " << argc << " ARGUMENTS" << endl;
 	for(i = 0 ; i < argc ; i++)
 	{
 		cout << i << ": " << argv[i] << endl;
+	}
+
+	if(argc > 2)
+	{
+		cout << USAGE_STRING << endl;
+		return -1;
+	} 
+	else if (argc == 2)
+	{
+		if(strcmp(argv[1], "shutup") == 0)
+		{
+			cout << "SHUTUP" << endl;
+			return 2;
+		}
+		else if (strcmp(argv[1], "wakeup") == 0)
+		{
+			cout << "WAKEUP" << endl;
+			return 3;
+		} 
+		else return 4;
+	}
+	
+	return 0;
+}
+
+int main(int argc, char* argv[])
+{
+	const int MODE = parse_arg(argc, argv);
+	cout << "MODE: " << MODE << endl;;
+	
+	if(MODE < 0)
+	{
+		return MODE;
+	} 
+	else 
+	{
+		int response(0);
+		switch(MODE)
+		{
+			case 0: break;
+			case 2:
+				response = system("./shutup.sh");
+				cout << "RESPONSE: " << response << endl;
+				return 0;
+			case 3:
+				response = system("./wakeup.sh");
+				cout << "RESPONSE: " << response << endl;
+				return 0;
+		}
+	}
+
+	if(_DEBUG)
+	{
+		cout << "DEBUG MODE" << endl;
 	}
 
 	/// signal handling: redirects signal SINGINT (15) to sigint_handler. See signal for more information about signal and signal handling.
