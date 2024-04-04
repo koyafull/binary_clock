@@ -35,6 +35,51 @@ using namespace std;
 const char* USAGE_STRING = 
 	"Usage:	binary_clock COMMAND\n\nwhere COMMAND is either of the following:\nshutup\t\tturn off every led\nwakeup\t\tturn on every led\n";
 
+const string get_exec_path()
+{
+	int pid = getpid();
+	string path = "/proc/" + to_string(pid) + "/exe";
+	char buf[100];
+	size_t path_length = readlink(path.c_str(), buf, sizeof(buf)-1);
+	buf[path_length] = 0;
+	string buf_string = string(buf);
+	return buf_string.substr(0, buf_string.find_last_of("\\/"));
+}
+
+void arg_handler(int argc, char* argv[], const string exec_path) 
+{
+	int i = 0;
+	cout << "READING " << argc << " ARGUMENTS" << endl;
+	for(i = 0 ; i < argc ; i++)
+	{
+		cout << i << ": " << argv[i] << endl;
+	}
+
+	if(argc == 1) return;
+
+	if(argc == 2)
+	{
+		int response(0);
+		if(strcmp(argv[1], "shutup") == 0)
+		{
+			cout << "SHUTUP" << endl;
+			response = system((exec_path + "/shutup.sh").c_str());
+			cout << "RESPONSE: " << response << endl;
+			exit(0);
+		}
+		else if(strcmp(argv[1], "wakeup") == 0)
+		{
+			cout << "WAKEUP" << endl;
+			response = system((exec_path + "/wakeup.sh").c_str());
+			cout << "RESPONSE: " << response << endl;
+			exit(0);
+		} 
+	}
+
+	cout << USAGE_STRING << endl;
+	exit(1);
+}
+
 int ctoi(char c)
 /// converts a char <c> to an int
 {
@@ -79,65 +124,11 @@ void update_gpio(led_panel* led_panel, char* time_buffer)
 	led_panel->print_gpio();
 }
 
-int parse_arg(int argc, char* argv[]) 
-{
-	int i = 0;
-	string path = system("ls /proc/self/exe");
-	cout << "READING " << argc << " ARGUMENTS" << endl;
-	cout << "READING " << argc << " ARGUMENTS" << endl;
-	for(i = 0 ; i < argc ; i++)
-	{
-		cout << i << ": " << argv[i] << endl;
-	}
-
-	if(argc > 2)
-	{
-		cout << USAGE_STRING << endl;
-		return -1;
-	} 
-	else if (argc == 2)
-	{
-		if(strcmp(argv[1], "shutup") == 0)
-		{
-			cout << "SHUTUP" << endl;
-			return 2;
-		}
-		else if (strcmp(argv[1], "wakeup") == 0)
-		{
-			cout << "WAKEUP" << endl;
-			return 3;
-		} 
-		else return 4;
-	}
-	
-	return 0;
-}
-
 int main(int argc, char* argv[])
 {
-	const int MODE = parse_arg(argc, argv);
-	cout << "MODE: " << MODE << endl;;
-	
-	if(MODE < 0)
-	{
-		return MODE;
-	} 
-	else 
-	{
-		int response(0);
-		switch(MODE)
-		{
-			case 0: break;
-			case 2:
-				response = system("./shutup.sh");
-				cout << "RESPONSE: " << response << endl;
-				return 0;
-			case 3:
-				response = system("./wakeup.sh");
-				cout << "RESPONSE: " << response << endl;
-				return 0;
-		}
-	}
+	const string EXEC_PATH = get_exec_path();
+	cout << "EXEC PATH = " << EXEC_PATH << endl;
+	arg_handler(argc, argv, EXEC_PATH);
 
 	if(_DEBUG)
 	{
