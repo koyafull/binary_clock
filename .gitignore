@@ -4,3 +4,6 @@ binary_clock
 *.old
 *.save
 
+.vscode/**/*
+!.vscode/launch.json
+!.vscode/tasks.json
