@@ -1,5 +1,7 @@
+#include "../headers/utils.h"
+
 #include <iostream>
-#include <string.h>
+#include <string>
 #include <unistd.h>
 #include <ctime>
 
@@ -11,7 +13,7 @@ int ctoi(char c)
 	return c - '0';		// ASCII trick to turn a single char digit to an int digit
 }
 
-const string get_exec_path()
+const std::string get_exec_path()
 {
 	int pid = getpid();
 	string path = "/proc/" + to_string(pid) + "/exe";

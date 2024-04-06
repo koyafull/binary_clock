@@ -1,9 +1,10 @@
 #include "../headers/led_panel.h"
 #include "../headers/common.h"
+#include "../headers/utils.h"
 
 using namespace std;
 
-led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int mint, int minu, int sect, int secu)
+led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, char* _time_buffer)
 /// instanciates the object and decalres the GPIO on the Raspberry Pi
 // params:
 //  _gpio_panel: mapping between led position on the clock and GPIO number for wiring
@@ -15,7 +16,7 @@ led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int m
 //  secu: units of seconds
 {
 	/// instanciates led_lines
-	this->set_led_panel(ht, hu, mint, minu, sect, secu);
+	this->set_led_panel(_time_buffer);
 	this->gpio_panel = _gpio_panel;
 
 	/// declares GPIO on the Raspberry Pi
@@ -60,7 +61,7 @@ led_panel::~led_panel()
 	}
 }
 
-void led_panel::set_led_panel(int ht, int hu, int mint, int minu, int sect, int secu)
+void led_panel::set_led_panel(char* time_buffer)
 /// declares let_line one by one
 // params:
 //  ht: tens of hours
@@ -72,12 +73,15 @@ void led_panel::set_led_panel(int ht, int hu, int mint, int minu, int sect, int 
 {
 	this->panel.clear();
 
-	this->panel.push_back(led_line(ht));
-        this->panel.push_back(led_line(hu));
-        this->panel.push_back(led_line(mint));
-        this->panel.push_back(led_line(minu));
-        this->panel.push_back(led_line(sect));
-        this->panel.push_back(led_line(secu));
+	this->panel.push_back(led_line(ctoi(time_buffer[0])));
+	this->panel.push_back(led_line(ctoi(time_buffer[1])));
+	this->panel.push_back(led_line(ctoi(time_buffer[3])));
+	this->panel.push_back(led_line(ctoi(time_buffer[4])));
+	this->panel.push_back(led_line(ctoi(time_buffer[6])));
+	this->panel.push_back(led_line(ctoi(time_buffer[7])));
+
+	this->print_binary_clock();
+	this->print_gpio();
 }
 
 const void led_panel::print_binary()

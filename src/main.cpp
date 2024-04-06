@@ -18,10 +18,10 @@
 #include <utility>	// pair<T, T>
 #include <map>
 #include <unistd.h>
-#include <string.h>
+#include <string>
 #include <regex>
 
-#include "./utils.cpp"
+#include "../headers/utils.h"
 #include "../headers/common.h"
 #include "../headers/led_panel.h"
 
@@ -73,24 +73,10 @@ void sigint_handler(int signum)
 	throw 20;		// to call led_panel destructor and close properly, we need to exit from main(), so we forward
 }
 
-void update_gpio(led_panel* led_panel, char* time_buffer)
-{
-		/// led_panel management
-	led_panel->set_led_panel(
-		ctoi(time_buffer[0]), 
-		ctoi(time_buffer[1]), 
-		ctoi(time_buffer[3]), 
-		ctoi(time_buffer[4]), 
-		ctoi(time_buffer[6]), 
-		ctoi(time_buffer[7])
-	);
-	led_panel->print_binary_clock();
-	led_panel->print_gpio();
-}
 
 int main(int argc, char* argv[])
 {
-	const string EXEC_PATH = get_exec_path();
+	const std::string EXEC_PATH = get_exec_path();
 	cout << "EXEC PATH = " << EXEC_PATH << endl;
 	int mode = arg_parser(argc, argv);
 	int response(0);
@@ -131,15 +117,7 @@ int main(int argc, char* argv[])
 		char time_buffer[10];
 		set_time_buffer(time_buffer);
 
-		led_panel current_panel = led_panel(
-			gpio_panel, 
-			ctoi(time_buffer[0]), 
-			ctoi(time_buffer[1]), 
-			ctoi(time_buffer[3]), 
-			ctoi(time_buffer[4]), 
-			ctoi(time_buffer[6]), 
-			ctoi(time_buffer[7])
-		);
+		led_panel current_panel = led_panel(gpio_panel, time_buffer);
 	
 		switch (mode)
 		{
@@ -148,7 +126,7 @@ int main(int argc, char* argv[])
 				{
 					/// infinite loop
 					set_time_buffer(time_buffer);
-					update_gpio(&current_panel, time_buffer);
+					current_panel.set_led_panel(time_buffer);
 					usleep(1000000);
 				}
 				break;
@@ -167,7 +145,7 @@ int main(int argc, char* argv[])
 
 			case 3:
 				cout << "FIXED TIME: " << argv[1] << endl;
-				update_gpio(&current_panel, argv[1]);
+				current_panel.set_led_panel(time_buffer);
 				exit(0);
 			
 			default:
