@@ -17,6 +17,9 @@
 #include <signal.h>
 #include <utility>	// pair<T, T>
 #include <map>
+#include <unistd.h>
+#include <string.h>
+#include <regex>
 
 #include "../headers/common.h"
 #include "../headers/led_panel.h"
@@ -30,10 +33,51 @@ using namespace std;
 	const bool _DEBUG = false;
 #endif
 
+const char* USAGE_STRING = 
+	"Usage:	binary_clock COMMAND\
+	\n\nwhere COMMAND is either of the following:\
+	\nshutup\t\tturn off every led\
+	\nwakeup\t\tturn on every led\
+	\nTIME\t\trespecting HH:MM:SS format";
+
 int ctoi(char c)
 /// converts a char <c> to an int
 {
 	return c - '0';		// ASCII trick to turn a single char digit to an int digit
+}
+
+const string get_exec_path()
+{
+	int pid = getpid();
+	string path = "/proc/" + to_string(pid) + "/exe";
+	char buf[100];
+	size_t path_length = readlink(path.c_str(), buf, sizeof(buf)-1);
+	buf[path_length] = 0;
+	string buf_string = string(buf);
+	return buf_string.substr(0, buf_string.find_last_of("\\/"));
+}
+
+int arg_parser(int argc, char* argv[]) 
+{
+	int i = 0;
+	cout << "READING " << argc << " ARGUMENTS" << endl;
+	for(i = 0 ; i < argc ; i++)
+	{
+		cout << i << ": " << argv[i] << endl;
+	}
+
+	if(argc == 1) return 0;
+
+	if(argc == 2)
+	{
+		int response(0);
+		if(strcmp(argv[1], "shutup") == 0) return 1;
+		else if(strcmp(argv[1], "wakeup") == 0) return 2;
+		else if(regex_match(argv[1], regex("^(?:[01]\\d|2[0123]):(?:[012345]\\d):(?:[012345]\\d)$"))) return 3;
+	}
+
+	cout << USAGE_STRING << endl;
+	exit(1);
 }
 
 void sigint_handler(int signum)
@@ -45,9 +89,44 @@ void sigint_handler(int signum)
 	throw 20;		// to call led_panel destructor and close properly, we need to exit from main(), so we forward
 }
 
-int main()
+void update_gpio(led_panel* led_panel, char* time_buffer)
 {
-	if(_DEBUG){
+		/// led_panel management
+	led_panel->set_led_panel(
+		ctoi(time_buffer[0]), 
+		ctoi(time_buffer[1]), 
+		ctoi(time_buffer[3]), 
+		ctoi(time_buffer[4]), 
+		ctoi(time_buffer[6]), 
+		ctoi(time_buffer[7])
+	);
+	led_panel->print_binary_clock();
+	led_panel->print_gpio();
+}
+
+void set_time_buffer(char* time_buffer)
+{
+	/// time management
+	/// creates time structure
+	time_t rawtime;
+	time(&rawtime);						// gets current time
+	struct tm* timeinfo;
+	timeinfo = localtime(&rawtime);		// converts it to friendly object
+
+	strftime(time_buffer, 10, "%H:%M:%S", timeinfo);	// fills buffer with specific format
+	cout << time_buffer << endl;
+	// cout << "time_buffer after loading: " << time_buffer << endl;
+}
+
+int main(int argc, char* argv[])
+{
+	const string EXEC_PATH = get_exec_path();
+	cout << "EXEC PATH = " << EXEC_PATH << endl;
+	int mode = arg_parser(argc, argv);
+	int response(0);
+
+	if(_DEBUG)
+	{
 		cout << "DEBUG MODE" << endl;
 	}
 
@@ -78,35 +157,53 @@ int main()
 		gpio_panel[make_pair(5,5)] = 12;
 		gpio_panel[make_pair(6,5)] = 6;
 		gpio_panel[make_pair(7,5)] = 5;
+		
+		char time_buffer[10];
+		set_time_buffer(time_buffer);
 
-		/// time management
-			/// creates time structure
-		time_t rawtime;
-		struct tm * timeinfo;
-		char buffer[10];
-
-		/// loop initialization
-		time(&rawtime);			// gets current time
-		timeinfo = localtime(&rawtime);	// converts it to friendly object
-
-		led_panel current_panel = led_panel(gpio_panel, ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
-
-		while(1)
+		led_panel current_panel = led_panel(
+			gpio_panel, 
+			ctoi(time_buffer[0]), 
+			ctoi(time_buffer[1]), 
+			ctoi(time_buffer[3]), 
+			ctoi(time_buffer[4]), 
+			ctoi(time_buffer[6]), 
+			ctoi(time_buffer[7])
+		);
+	
+		switch (mode)
 		{
-			/// infinite loop
-				/// time management
-			time(&rawtime);					// gets current time
-			timeinfo = localtime(&rawtime);			// converts it to friendly object
+			case 0:
+				while(1)
+				{
+					/// infinite loop
+					set_time_buffer(time_buffer);
+					update_gpio(&current_panel, time_buffer);
+					usleep(1000000);
+				}
+				break;
 
-			strftime(buffer, 10, "%H:%M:%S", timeinfo);	// fills buffer with specific format
-			cout << buffer << endl;
+			case 1:
+				cout << "SHUTUP" << endl;
+				response = system((EXEC_PATH + "/shutup.sh").c_str());
+				cout << "RESPONSE: " << response << endl;
+				exit(0);
 
-				/// led_panel management
-			current_panel.set_led_panel(ctoi(buffer[0]), ctoi(buffer[1]), ctoi(buffer[3]), ctoi(buffer[4]), ctoi(buffer[6]), ctoi(buffer[7]));
-			current_panel.print_binary_clock();
-			current_panel.print_gpio();
-			usleep(1000000);
+			case 2:
+				cout << "WAKEUP" << endl;
+				response = system((EXEC_PATH + "/wakeup.sh").c_str());
+				cout << "RESPONSE: " << response << endl;
+				exit(0);
+
+			case 3:
+				cout << "FIXED TIME: " << argv[1] << endl;
+				update_gpio(&current_panel, argv[1]);
+				exit(0);
+			
+			default:
+				exit(1);
 		}
+
 	}
 	/// sigint graceful exiting
 	catch(int e)

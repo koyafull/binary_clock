@@ -39,6 +39,7 @@ led_panel::led_panel(map<pair<int, int>, int> _gpio_panel, int ht, int hu, int m
 led_panel::~led_panel()
 /// destructs the led_panel gracefully by freeing GPIO from the Raspberry Pi
 {
+	cout << "IAM THE DESTRUCTOR OF WORLD" << endl;
 	map<pair<int, int>, int>::iterator it;
 	for(it = gpio_panel.begin(); it != gpio_panel.end(); it++)
 	{
