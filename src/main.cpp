@@ -12,6 +12,7 @@
 //#define DEBUG
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include <unistd.h>	// usleep()
 #include <stdlib.h>
 #include <signal.h>
@@ -24,9 +25,11 @@
 #include "../headers/utils.h"
 #include "../headers/common.h"
 #include "../headers/led_panel.h"
+#include "../headers/json.hpp"
 
 
 using namespace std;
+using json = nlohmann::json;
 
 #ifdef DEBUG_MODE
 	const bool _DEBUG = true;
@@ -91,34 +94,22 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		/// environment variable creation
-		map<pair<int, int>, int> gpio_panel;
-		gpio_panel[make_pair(6,0)] = 14;
-		gpio_panel[make_pair(7,0)] = 4;
-		gpio_panel[make_pair(4,1)] = 15;
-		gpio_panel[make_pair(5,1)] = 18;
-		gpio_panel[make_pair(6,1)] = 17;
-		gpio_panel[make_pair(7,1)] = 27;
-		gpio_panel[make_pair(5,2)] = 24;
-		gpio_panel[make_pair(6,2)] = 23;
-		gpio_panel[make_pair(7,2)] = 22;
-		gpio_panel[make_pair(4,3)] = 8;
-		gpio_panel[make_pair(5,3)] = 25;
-		gpio_panel[make_pair(6,3)] = 9;
-		gpio_panel[make_pair(7,3)] = 10;
-		gpio_panel[make_pair(5,4)] = 1;
-		gpio_panel[make_pair(6,4)] = 7;
-		gpio_panel[make_pair(7,4)] = 11;
-		gpio_panel[make_pair(4,5)] = 16;
-		gpio_panel[make_pair(5,5)] = 12;
-		gpio_panel[make_pair(6,5)] = 6;
-		gpio_panel[make_pair(7,5)] = 5;
-		
+		/// time setup
 		char time_buffer[10];
 		set_time_buffer(time_buffer);
 
+		/// hardware configuration mapping
+		map<pair<int, int>, int> gpio_panel;
+		ifstream f("./conf.json");
+		json gpio = json::parse(f).at("gpio_mapping");
+		for (auto it = gpio.begin(); it != gpio.end(); ++it)
+		{
+			gpio_panel[make_pair(it.value()[0], it.value()[1])] = stoi(it.key());
+		}
+		
 		led_panel current_panel = led_panel(gpio_panel, time_buffer);
-	
+
+		/// everything is ready, go!	
 		switch (mode)
 		{
 			case 0:
