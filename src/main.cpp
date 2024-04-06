@@ -100,7 +100,7 @@ int main(int argc, char* argv[])
 
 		/// hardware configuration mapping
 		map<pair<int, int>, int> gpio_panel;
-		ifstream f(EXEC_PATH + "./conf.json");
+		ifstream f(EXEC_PATH + "/conf.json");
 		json gpio = json::parse(f).at("gpio_mapping");
 		for (auto it = gpio.begin(); it != gpio.end(); ++it)
 		{
