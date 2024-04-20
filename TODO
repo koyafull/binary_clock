@@ -1,2 +1,2 @@
-SET GPIO IN MAIN, NOT IN OBJECT
-LOG MANAGEMENT
+- LOG MANAGEMENT
+- set the GPIO path a variable depending on make target (dev or prod)
