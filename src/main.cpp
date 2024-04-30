@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 
 			case 3:
 				cout << "FIXED TIME: " << argv[1] << endl;
-				current_panel.set_led_panel(time_buffer);
+				current_panel.set_led_panel(argv[1]);
 				exit(0);
 			
 			default:
